@@ -62,17 +62,18 @@ function reset(){
 }
 
 function gridCallBack(event){
-    
     const element = event.target;
+    if (!element.matches('.selected')){
+        numOfClick++;
+    }
     const num = parseInt(element.innerHTML);
     if(isBomb(num)){
         element.classList.add('bomb');
-        revealAllBomb()
-        console.log(revealAllBomb)
+        revealAllBomb();
         Lose();
     }else{
         element.classList.add('selected');
-        numOfClick++
+        
     }
     
     let winCondition = (cellNumber - 16);
@@ -103,7 +104,7 @@ function bombGenerator( nBox ){
 }
 
 function Lose(){
-    result.innerHTML = `<h2>HAI PERSO score: ${numOfClick}<h2>`
+    result.innerHTML = `<h2>HAI PERSO score: ${numOfClick - 1}<h2>`
     main.append(result);
     grid.removeEventListener('click', gridCallBack);
 }
@@ -124,7 +125,6 @@ function isBomb(num){
 
 function revealAllBomb(){
     const allCell = document.getElementsByClassName('square');
-    console.log(allCell)
     for(let i=0; i<allCell.length; i++){
         const numCell = allCell[i].innerHTML;
         if(isBomb(numCell)){ 
