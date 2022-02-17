@@ -63,26 +63,27 @@ function reset(){
 
 function gridCallBack(event){
     const element = event.target;
-    if (!element.matches('.selected')){
-        numOfClick++;
-    }
-    const num = parseInt(element.innerHTML);
-    if(isBomb(num)){
-        element.classList.add('bomb');
-        revealAllBomb();
-        Lose();
-    }else{
-        element.classList.add('selected');
+    if(!element.matches('.grid')){
+        if (!element.matches('.selected')){
+            numOfClick++;
+        }
+        const num = parseInt(element.innerHTML);
+        if(isBomb(num)){
+            element.classList.add('bomb');
+            revealAllBomb();
+            Lose();
+        }else{
+            element.classList.add('selected');
+            
+        }
         
+        let winCondition = (cellNumber - 16);
+        if(numOfClick == winCondition){
+            grid.removeEventListener('click', gridCallBack);
+            Win();
+        }
     }
-    
-    let winCondition = (cellNumber - 16);
-    if(numOfClick == winCondition){
-        grid.removeEventListener('click', gridCallBack);
-        Win();
-    }
-    
-    console.log(numOfClick);
+    //console.log(numOfClick);
     //console.log(cellNumber)
 }
 
