@@ -5,7 +5,6 @@ const grid = document.querySelector('.grid');
 const main = document.querySelector('main')
 const result = document.createElement('h2');
 let vettBomb;
-let numOfClick;
 let columns;
 let cellNumber;
 
@@ -63,24 +62,27 @@ function reset(){
 }
 
 function gridCallBack(event){
-    numOfClick++;
+    
     const element = event.target;
     const num = parseInt(element.innerHTML);
     if(isBomb(num)){
         element.classList.add('bomb');
+        revealAllBomb()
+        console.log(revealAllBomb)
         Lose();
     }else{
         element.classList.add('selected');
+        numOfClick++
     }
-
+    
     let winCondition = (cellNumber - 16);
     if(numOfClick == winCondition){
         grid.removeEventListener('click', gridCallBack);
         Win();
     }
-
+    
     console.log(numOfClick);
-    console.log(cellNumber)
+    //console.log(cellNumber)
 }
 
 function random(min , max){
@@ -101,7 +103,7 @@ function bombGenerator( nBox ){
 }
 
 function Lose(){
-    result.innerHTML = `<h2>HAI PERSO score: ${numOfClick - 1}<h2>`
+    result.innerHTML = `<h2>HAI PERSO score: ${numOfClick}<h2>`
     main.append(result);
     grid.removeEventListener('click', gridCallBack);
 }
@@ -118,4 +120,15 @@ function isBomb(num){
         }
     }
     return false;
+}
+
+function revealAllBomb(){
+    const allCell = document.getElementsByClassName('square');
+    console.log(allCell)
+    for(let i=0; i<allCell.length; i++){
+        const numCell = allCell[i].innerHTML;
+        if(isBomb(numCell)){ 
+            allCell[i].classList.add('bomb')
+        }   
+    }
 }
