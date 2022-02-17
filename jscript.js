@@ -15,30 +15,24 @@ buttonPlay.addEventListener('click', function(){
     
     switch (selectDifficult.value){
         case 'easy':
-            console.log(selectDifficult.value);
             columns = 10;
             cellNumber= columns*columns;
             boxGenerator(cellNumber,columns); //(numero celle , numero colonne)
-            vettBomb = bombGenerator(100);
-            console.log(vettBomb)
+            vettBomb = bombGenerator(cellNumber);
             break;
 
         case 'medium':
-            console.log(selectDifficult.value);
             columns = 9;
             cellNumber= columns*columns;
             boxGenerator(cellNumber,columns);
-            vettBomb = bombGenerator(81);
-            //console.log(vettBomb);
+            vettBomb = bombGenerator(cellNumber);
             break;
         
         case 'crazy':
-            console.log(selectDifficult.value);
             columns = 7;
             cellNumber= columns*columns;
             boxGenerator(cellNumber,columns);
-            vettBomb = bombGenerator(49);
-            console.log(vettBomb);
+            vettBomb = bombGenerator(cellNumber);
             break;    
     }
 })
@@ -71,23 +65,22 @@ function reset(){
 function gridCallBack(event){
     numOfClick++;
     const element = event.target;
-    element.classList.add('selected');
     const num = parseInt(element.innerHTML);
-    for(let i=0; i<vettBomb.length; i++){
-        if(num == vettBomb[i]){
-            element.classList.add('bomb');
-            grid.removeEventListener('click', gridCallBack);
-            Lose();
-        }
+    if(isBomb(num)){
+        element.classList.add('bomb');
+        Lose();
+    }else{
+        element.classList.add('selected');
     }
-    let winCondition=cellNumber-16
+
+    let winCondition = (cellNumber - 16);
     if(numOfClick == winCondition){
         grid.removeEventListener('click', gridCallBack);
         Win();
     }
+
     console.log(numOfClick);
     console.log(cellNumber)
-     
 }
 
 function random(min , max){
@@ -110,9 +103,19 @@ function bombGenerator( nBox ){
 function Lose(){
     result.innerHTML = `<h2>HAI PERSO score: ${numOfClick - 1}<h2>`
     main.append(result);
+    grid.removeEventListener('click', gridCallBack);
 }
 
 function Win(){
     result.innerHTML = `<h2>HAI VINTO score: ${numOfClick}<h2>`
     main.append(result);
+}
+
+function isBomb(num){
+    for(let i=0; i<vettBomb.length; i++){
+        if(num == vettBomb[i]){
+            return true;
+        }
+    }
+    return false;
 }
